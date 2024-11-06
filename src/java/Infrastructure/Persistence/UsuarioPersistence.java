@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import Business.Exceptions.DuplicateUserException;
 import Business.Exceptions.UsuarioNoEncontradoException;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,13 +19,23 @@ import java.util.List;
  */
 public class UsuarioPersistence {
 
-    // Método para guardar usuarios
+    /**
+     * Método para guardar un usuario en la base de datos.
+     *
+     * @param usuario El objeto Usuario que se va a guardar.
+     * @return El ID del usuario guardado.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws DuplicateUserException Si el usuario ya existe.
+     */
     public int guardarUsuario(Usuario usuario) throws SQLException, DuplicateUserException {
         String sql = "INSERT INTO Usuarios (password, nombre, apellidos, rol, email, telefono, estado, fecha_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
+        // Hash de la contraseña antes de guardarla
+        String hashedPassword = BCrypt.withDefaults().hashToString(12, usuario.getPassword().toCharArray());
+
         try (Connection conn = ConnectionMySql.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, usuario.getPassword());
+            pstmt.setString(1, hashedPassword);
             pstmt.setString(2, usuario.getNombre());
             pstmt.setString(3, usuario.getApellidos());
             pstmt.setString(4, usuario.getRol());
@@ -33,7 +44,11 @@ public class UsuarioPersistence {
             pstmt.setString(7, usuario.getEstado());
             pstmt.setDate(8, new java.sql.Date(usuario.getFechaRegistro().getTime()));
 
-            pstmt.executeUpdate();
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("No se pudo insertar el usuario, ninguna fila afectada.");
+            }
 
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
@@ -51,32 +66,41 @@ public class UsuarioPersistence {
         }
     }
 
-    // Método para buscar usuario por email
-    public Usuario buscarUsuarioPorEmail(String email) throws SQLException, UsuarioNoEncontradoException {
+    /**
+     * Método para buscar un usuario por su email en la base de datos.
+     *
+     * @param email El email del usuario a buscar.
+     * @retg Método para contar el número de usuarios en la base de datos.
+     *
+     * @return El número total de usuarios.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     */
+    public Usuario buscarUsuarioPorEmail(String email) throws SQLException {
         String sql = "SELECT * FROM Usuarios WHERE email = ?";
 
         try (Connection conn = ConnectionMySql.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
 
-            if (rs.next()) {
-                return new Usuario(
-                        rs.getInt("id"),
-                        rs.getString("password"),
-                        rs.getString("nombre"),
-                        rs.getString("apellidos"),
-                        rs.getString("rol"),
-                        rs.getString("email"),
-                        rs.getString("telefono"),
-                        rs.getString("estado"),
-                        rs.getDate("fecha_registro")
-                );
-            } else {
-                throw new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado.");
+            pstmt.setString(1, email);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Usuario(
+                            rs.getInt("id"),
+                            rs.getString("password"),
+                            rs.getString("nombre"),
+                            rs.getString("apellidos"),
+                            rs.getString("rol"),
+                            rs.getString("email"),
+                            rs.getString("telefono"),
+                            rs.getString("estado"),
+                            rs.getDate("fecha_registro")
+                    );
+                } else {
+                    return null; // Usuario no encontrado
+                }
             }
         }
     }
-// Método para contar el número de usuarios
 
     public int contarUsuarios() throws SQLException {
         String sql = "SELECT COUNT(*) AS total FROM Usuarios";
@@ -91,7 +115,13 @@ public class UsuarioPersistence {
         }
     }
 
-// Método para editar un usuario existente
+    /**
+     * Método para editar un usuario existente en la base de datos.
+     *
+     * @param usuario El objeto Usuario que se va a editar.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws UsuarioNoEncontradoException Si el usuario no se encuentra.
+     */
     public void editarUsuario(Usuario usuario) throws SQLException, UsuarioNoEncontradoException {
         if (usuario == null) {
             throw new IllegalArgumentException("El usuario no puede ser nulo.");
@@ -112,13 +142,19 @@ public class UsuarioPersistence {
             pstmt.setInt(9, usuario.getId());
 
             int rowsUpdated = pstmt.executeUpdate();
+
             if (rowsUpdated == 0) {
                 throw new UsuarioNoEncontradoException("Usuario con ID " + usuario.getId() + " no encontrado.");
             }
         }
     }
 
-    // Método para listar todos los usuarios
+    /**
+     * Método para listar todos los usuarios en la base de datos.
+     *
+     * @return Una lista de objetos Usuario.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     */
     public List<Usuario> listarUsuarios() throws SQLException {
         String sql = "SELECT * FROM Usuarios";
         List<Usuario> usuarios = new ArrayList<>();
@@ -143,7 +179,14 @@ public class UsuarioPersistence {
         return usuarios;
     }
 
-    // Método para Editar Contraseña
+    /**
+     * Método para editar la contraseña de un usuario.
+     *
+     * @param email El email del usuario.
+     * @param nuevaContraseña La nueva contraseña del usuario.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws UsuarioNoEncontradoException Si el usuario no se encuentra.
+     */
     public void editarContraseña(String email, String nuevaContraseña) throws SQLException, UsuarioNoEncontradoException {
         if (email == null || email.isEmpty()) {
             throw new IllegalArgumentException("El email no puede ser nulo o vacío.");
@@ -152,18 +195,66 @@ public class UsuarioPersistence {
             throw new IllegalArgumentException("La nueva contraseña no puede ser nula o vacía.");
         }
 
+        // Hash de la nueva contraseña antes de actualizarla
+        String hashedPassword = BCrypt.withDefaults().hashToString(12, nuevaContraseña.toCharArray());
+
         String sql = "UPDATE Usuarios SET password = ? WHERE email = ?";
 
         try (Connection conn = ConnectionMySql.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1, nuevaContraseña);
+            pstmt.setString(1, hashedPassword);
             pstmt.setString(2, email);
 
             int rowsUpdated = pstmt.executeUpdate();
+
             if (rowsUpdated == 0) {
                 throw new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado.");
             }
         }
     }
 
+    /**
+     * * Método para autenticar un usuario durante el login.
+     *
+     * @param email El email del usuario.
+     * @param password La contraseña del usuario.
+     * @return El objeto Usuario si la autenticación es exitosa.
+     * @throws SQLException Si ocurre un error en la base de datos.
+     * @throws UsuarioNoEncontradoException Si el usuario no es encontrado o la
+     * contraseña no coincide.
+     */
+    public Usuario autenticarUsuario(String email, String password) throws SQLException, UsuarioNoEncontradoException {
+        String sql = "SELECT * FROM Usuarios WHERE email = ?";
+
+        try (Connection conn = ConnectionMySql.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String storedPassword = rs.getString("password");
+
+                    // Verificar contraseña
+                    BCrypt.Result result = BCrypt.verifyer().verify(password.toCharArray(), storedPassword);
+                    if (result.verified) {
+                        return new Usuario(
+                                rs.getInt("id"),
+                                storedPassword,
+                                rs.getString("nombre"),
+                                rs.getString("apellidos"),
+                                rs.getString("rol"),
+                                rs.getString("email"),
+                                rs.getString("telefono"),
+                                rs.getString("estado"),
+                                rs.getDate("fecha_registro")
+                        );
+                    } else {
+                        throw new UsuarioNoEncontradoException("La contraseña es incorrecta.");
+                    }
+                } else {
+                    throw new UsuarioNoEncontradoException("Usuario con email " + email + " no encontrado.");
+                }
+            }
+        }
+    }
 }

@@ -3,6 +3,9 @@ package Domain.Model;
 import java.util.Date;
 import java.util.regex.Pattern;
 
+/**
+ * Clase que representa a un Usuario con todas sus propiedades y validaciones
+ */
 public class Usuario {
 
     private int id;
@@ -15,15 +18,19 @@ public class Usuario {
     private String estado;
     private Date fechaRegistro;
 
+    // Constructor por defecto 
+    public Usuario() {
+    }
+
     // Constructor
     public Usuario(int id, String password, String nombre, String apellidos, String rol, String email, String telefono, String estado, Date fechaRegistro) {
-        this.setPassword(password);    // Llamamos al setter que tiene la validación
-        this.setNombre(nombre);           // Validación de nombre
-        this.setApellidos(apellidos);     // Validación de apellidos
-        this.setRol(rol);                 // Validación de rol
-        this.setEmail(email);             // Validación de email
-        this.setTelefono(telefono);       // Validación de teléfono (opcional)
-        this.setFechaRegistro(fechaRegistro);  // Validación de fecha de registro
+        this.setPassword(password); // Llamamos al setter que tiene la validación
+        this.setNombre(nombre); // Validación de nombre
+        this.setApellidos(apellidos); // Validación de apellidos
+        this.setRol(rol); // Validación de rol
+        this.setEmail(email); // Validación de email
+        this.setTelefono(telefono); // Validación de teléfono (opcional)
+        this.setFechaRegistro(fechaRegistro); // Validación de fecha de registro
         this.id = id;
         this.estado = estado;
     }

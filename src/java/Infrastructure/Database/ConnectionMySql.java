@@ -5,8 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
+ * Clase para gestionar la conexión a la base de datos MySQL.
  *
- * @author Ander
+ * @autor Ander
  */
 public class ConnectionMySql {
 
@@ -14,6 +15,12 @@ public class ConnectionMySql {
     private static final String USER = "root";
     private static final String PASSWORD = "Ander";
 
+    /**
+     * Método para obtener la conexión a la base de datos.
+     *
+     * @return Connection objeto de conexión a la base de datos.
+     * @throws SQLException si ocurre un error durante la conexión.
+     */
     public static Connection getConnection() throws SQLException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
