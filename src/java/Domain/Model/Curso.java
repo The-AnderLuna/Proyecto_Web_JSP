@@ -1,3 +1,4 @@
+
 package Domain.Model;
 
 import java.util.Date;
