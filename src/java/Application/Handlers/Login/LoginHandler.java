@@ -38,6 +38,7 @@ public class LoginHandler extends HttpServlet {
             session.setAttribute("usuarioNombre", usuario.getNombre());
             session.setAttribute("usuarioApellidos", usuario.getApellidos());
             session.setAttribute("usuarioEmail", usuario.getEmail());
+            session.setAttribute("usuarioRol", usuario.getRol()); // Asegúrate de que el rol se guarda en la sesión
 
             response.sendRedirect(request.getContextPath() + "/Views/Forms/Login/Welcome.jsp");
         } catch (UsuarioNoEncontradoException e) {

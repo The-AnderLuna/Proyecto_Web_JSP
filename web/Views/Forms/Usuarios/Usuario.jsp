@@ -25,22 +25,22 @@
             <p>Aquí puedes gestionar los usuarios.</p>
 
             <!-- Botón para Crear Usuario -->
-            <form action="<%= request.getContextPath()%>/crear_usuario.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Usuarios/crear_usuario.jsp" method="get">
                 <button type="submit">Crear Usuario</button>
             </form>
 
             <!-- Botón para Buscar Usuario -->
-            <form action="<%= request.getContextPath()%>/buscar_usuario.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Usuarios/buscar_usuario.jsp" method="get">
                 <button type="submit">Buscar Usuario</button>
             </form>
 
             <!-- Botón para Editar Usuario -->
-            <form action="<%= request.getContextPath()%>/editar_usuario.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Usuarios/editar_usuario.jsp" method="get">
                 <button type="submit">Editar Usuario</button>
             </form>
 
             <!-- Botón para Listar Usuarios -->
-            <form action="<%= request.getContextPath()%>/Application/Handlers/Handle_Listar_Usuarios" method="post">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Usuarios/listar_usuario.jsp" method="post">
                 <button type="submit">Listar Usuarios</button>
             </form>
 

@@ -25,27 +25,27 @@
             <p>Aquí puedes gestionar los cursos.</p>
 
             <!-- Botón para Crear Curso -->
-            <form action="<%= request.getContextPath()%>/crear_curso.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/crear_curso.jsp" method="get">
                 <button type="submit">Crear Curso</button>
             </form>
 
             <!-- Botón para Buscar Curso -->
-            <form action="<%= request.getContextPath()%>/buscar_curso.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/buscar_curso.jsp" method="get">
                 <button type="submit">Buscar Curso</button>
             </form>
 
             <!-- Botón para Editar Curso -->
-            <form action="<%= request.getContextPath()%>/editar_curso.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/editar_curso.jsp" method="get">
                 <button type="submit">Editar Curso</button>
             </form>
 
             <!-- Botón para Listar Cursos -->
-            <form action="<%= request.getContextPath()%>/Application/Handlers/Handle_Listar_Cursos" method="post">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/listar_curso.jsp" method="post">
                 <button type="submit">Listar Cursos</button>
             </form>
 
             <!-- Botón para Eliminar Curso -->
-            <form action="<%= request.getContextPath()%>/eliminar_curso.jsp" method="get">
+                <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/eliminar_curso.jsp" method="get">
                 <button type="submit">Eliminar Curso</button>
             </form>
 
