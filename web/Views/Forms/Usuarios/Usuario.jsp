@@ -39,9 +39,9 @@
                 <button type="submit">Editar Usuario</button>
             </form>
 
-            <!-- Botón para Listar Usuarios -->
-            <form action="<%= request.getContextPath()%>/Views/Forms/Usuarios/listar_usuario.jsp" method="post">
-                <button type="submit">Listar Usuarios</button>
+            <!-- Botón para Listar Usuarios --> 
+            <form action="<%= request.getContextPath()%>/listarUsuarios" method="get"> 
+                <button type="submit">Listar Usuarios</button> 
             </form>
 
             <p><a href="<%= request.getContextPath()%>/Views/Forms/Login/Welcome.jsp">Volver</a></p>

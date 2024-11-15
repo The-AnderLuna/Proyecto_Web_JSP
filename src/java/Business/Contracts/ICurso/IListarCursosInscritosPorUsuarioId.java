@@ -5,9 +5,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Interface específica para Listar Cursos Inscritos Por Usuario
+ * Interface específica para listar cursos inscritos por usuario.
  *
- * @author Ander
+ * @autor Ander
  */
 public interface IListarCursosInscritosPorUsuarioId {
 

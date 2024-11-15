@@ -1,4 +1,3 @@
-
 package Domain.Model;
 
 import java.util.Date;
@@ -13,6 +12,20 @@ public class Curso {
     private int usuarioId;
 
     // Constructor
+    public Curso() {
+    }
+    
+// Constructor sin ID (para nuevos cursos)
+
+    public Curso(String nombre, float duracion, int estudiantes, Date fechaInicio, int usuarioId) {
+        this.setNombre(nombre);        // Validación de nombre
+        this.setDuracion(duracion);    // Validación de duración
+        this.setEstudiantes(estudiantes);  // Validación de estudiantes
+        this.setFechaInicio(fechaInicio);  // Validación de fecha de inicio
+
+        this.usuarioId = usuarioId;
+    }
+
     public Curso(int id, String nombre, float duracion, int estudiantes, Date fechaInicio, int usuarioId) {
         this.setNombre(nombre);        // Validación de nombre
         this.setDuracion(duracion);    // Validación de duración
@@ -81,5 +94,9 @@ public class Curso {
 
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public void setNumeroEstudiantes(int parseInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

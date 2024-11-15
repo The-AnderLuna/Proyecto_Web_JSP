@@ -4,9 +4,9 @@ import Domain.Model.Curso;
 import java.sql.SQLException;
 
 /**
- * Interface específica para Guardar curso
+ * Interface específica para editar cursos.
  *
- * @author Ander
+ * @autor Ander
  */
 public interface IEditarCurso {
 

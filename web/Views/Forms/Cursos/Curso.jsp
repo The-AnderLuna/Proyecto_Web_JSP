@@ -39,13 +39,13 @@
                 <button type="submit">Editar Curso</button>
             </form>
 
-            <!-- Botón para Listar Cursos -->
-            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/listar_curso.jsp" method="post">
-                <button type="submit">Listar Cursos</button>
+            <!-- Botón para Listar Mis Cursos -->
+            <form action="<%= request.getContextPath()%>/listarCursosPorUsuario" method="get">
+                <button type="submit">Mis Cursos</button>
             </form>
 
             <!-- Botón para Eliminar Curso -->
-                <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/eliminar_curso.jsp" method="get">
+            <form action="<%= request.getContextPath()%>/Views/Forms/Cursos/eliminar_curso.jsp" method="get">
                 <button type="submit">Eliminar Curso</button>
             </form>
 

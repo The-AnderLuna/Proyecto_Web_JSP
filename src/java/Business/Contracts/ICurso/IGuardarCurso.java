@@ -4,12 +4,12 @@ import Domain.Model.Curso;
 import java.sql.SQLException;
 
 /**
- * Interface específica para Guardar curso
+ * Interface específica para guardar cursos.
  *
- * @author Ander
+ * @autor Ander
  */
 public interface IGuardarCurso {
 
-    int guardarCurso(Curso curso) throws SQLException;
-
+    void guardarCurso(Curso curso) throws SQLException;
 }
+    

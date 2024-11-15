@@ -5,13 +5,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Interface específica para Listar cursos
+ * Interface específica para listar cursos.
  *
- * @author Ander
+ * @autor Ander
  */
-
 public interface IListarCursos {
 
     List<Curso> listarCursos() throws SQLException;
-
 }
