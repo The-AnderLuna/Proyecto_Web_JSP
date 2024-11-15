@@ -22,5 +22,4 @@ public interface ICursoRepository {
 
     List<Curso> listarCursosPorUsuarioId(int usuarioId) throws SQLException;
 
-    List<Curso> listarCursosInscritosPorUsuarioId(int usuarioId) throws SQLException;
 }

@@ -69,4 +69,5 @@ public interface IUsuarioRepository {
      */
     void editarContraseña(String email, String nuevaContraseña) throws SQLException, UsuarioNoEncontradoException;
 
+    Usuario buscarUsuarioPorId(int id) throws SQLException;
 }

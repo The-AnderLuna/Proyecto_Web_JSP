@@ -4,6 +4,7 @@ import Business.Contracts.ICurso.ICursoRepository;
 import Business.Contracts.ICurso.IEditarCurso;
 import Business.Contracts.ICurso.IEliminarCurso;
 import Business.Contracts.ICurso.IGuardarCurso;
+import Business.Contracts.ICurso.IListarCursos;
 import Domain.Model.Curso;
 import Infrastructure.Database.ConnectionMySql;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CursoPersistence implements ICursoRepository, IGuardarCurso, IEditarCurso, IEliminarCurso {
+public class CursoPersistence implements ICursoRepository, IGuardarCurso, IEditarCurso, IEliminarCurso,IListarCursos {
 
     @Override
     public void guardarCurso(Curso curso) throws SQLException {
@@ -146,32 +147,5 @@ public class CursoPersistence implements ICursoRepository, IGuardarCurso, IEdita
         return cursos;
     }
 
-    @Override
-    public List<Curso> listarCursosInscritosPorUsuarioId(int usuarioId) throws SQLException {
-        String sql = "SELECT c.* FROM Cursos c "
-                + "JOIN RegistroCursos rc ON c.id = rc.curso_id "
-                + "WHERE rc.usuario_id = ?";
-        List<Curso> cursos = new ArrayList<>();
-
-        try (Connection conn = ConnectionMySql.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, usuarioId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    Curso curso = new Curso(
-                            rs.getInt("id"),
-                            rs.getString("nombre"),
-                            rs.getFloat("duracion"),
-                            rs.getInt("estudiantes"),
-                            rs.getDate("fecha_inicio"),
-                            rs.getInt("usuario_id")
-                    );
-                    cursos.add(curso);
-                }
-            }
-        } catch (SQLException e) {
-            throw new SQLException("Error al listar los cursos inscritos por el usuario: " + e.getMessage(), e);
-        }
-
-        return cursos;
-    }
+    
 }

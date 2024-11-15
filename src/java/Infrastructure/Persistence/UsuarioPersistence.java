@@ -1,5 +1,6 @@
 package Infrastructure.Persistence;
 
+import Business.Contracts.IUsuario.IUsuarioRepository;
 import Domain.Model.Usuario;
 import Infrastructure.Database.ConnectionMySql;
 import java.sql.Connection;
@@ -257,4 +258,5 @@ public class UsuarioPersistence {
             }
         }
     }
+
 }
